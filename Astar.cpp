@@ -59,16 +59,20 @@ void print2DVector(T Vec,bool lines=false)
 
 // Search function which will generate the expansion list ####*/
 void search(Map map, Planner planner)
-{
-vector<vector <int> > frontiers = { {0, planner.start[0], planner.start[1]} };
+{int  expansion = 0;
+int h_distance = 0;
+int findTarget =  false;
+
+h_distance = abs(planner.start[0]-planner.goal[0]) + abs(planner.start[1]-planner.goal[1]);
+vector<vector <int> > frontiers = { {h_distance, 0, planner.start[0], planner.start[1]} };
 map.grid[planner.start[0]][planner.start[1]] = 1;
+
 vector<vector <int> > vector_map(map.mapHeight,vector<int>(map.mapWidth,-1));
 vector<vector <int> > action_map(map.mapHeight,vector<int>(map.mapWidth,-1));
 vector<vector <string> > path_map(map.mapHeight,vector<string>(map.mapWidth,"-"));
 path_map[planner.goal[0]][planner.goal[1]] = "*";
 
-int  expansion = 0;
-int findTarget =  false;
+
 while(frontiers.size()>0)
 {
 sort(frontiers.begin(),frontiers.end()); 
@@ -82,12 +86,12 @@ print2DVector(frontiers);
 // Selected  note for BFS
 vector<int> frontier = frontiers.back();
 frontiers.pop_back();
-vector_map[frontier[1]][frontier[2]] = expansion;
 
+vector_map[frontier[2]][frontier[3]] = frontier[1];
 
-cout<< "Cell Picked:["<<frontier[0]<<" "<<frontier[1]<<" "<<frontier[2] << "]" <<endl;
+cout<< "Cell Picked:["<<frontier[0]<<" "<<frontier[1]<<" "<<frontier[2]<< " "<<frontier[3] << "]" <<endl;
 cout<<endl;
-if(frontier[1]==planner.goal[0] && frontier[2]==planner.goal[1])
+if(frontier[2]==planner.goal[0] && frontier[3]==planner.goal[1])
 {
 findTarget = true;
 break;
@@ -96,24 +100,26 @@ break;
 // Add node to frontiers and direction index to action_map
 for(int i=0;i<planner.movements.size();i++)
 {
-int new_weight = frontier[0]+1;
-int new_y = frontier[1] + planner.movements[i][0];
-int new_x = frontier[2] + planner.movements[i][1];
-if(new_y>=0 && new_y<map.mapHeight  && \
-    new_x>=0 && new_x<map.mapWidth  && \
-    map.grid[new_y][new_x]==0 ){
-    frontiers.push_back({new_weight,new_y,new_x});
-    map.grid[new_y][new_x] = 1;
-    action_map[new_y][new_x] = i;
-}
-}
+int cost = frontier[1]+1;
+int y = frontier[2] + planner.movements[i][0];
+int x = frontier[3] + planner.movements[i][1];
+h_distance = abs(y-planner.goal[0]) + abs(x-planner.goal[1]);
+int f = h_distance + cost;
 
+if(y>=0 && y<map.mapHeight  && \
+    x>=0 && x<map.mapWidth  && \
+    map.grid[y][x]==0 ){
+    frontiers.push_back({f, cost, y, x});
+    map.grid[y][x] = 1;
+    action_map[y][x] = i;
+}
+}
 expansion +=  1;
 }
 
+//Back propagation from goal to start
 int y = planner.goal[0];
 int x = planner.goal[1];
-
 while(y != planner.start[0] || x != planner.start[1])
 {
 int index = action_map[y][x];

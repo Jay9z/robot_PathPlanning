@@ -1,13 +1,12 @@
-# robot_PathPlanning
-path planning
-
+# Robot Path Planning
+demostrate path planning algorithm with BFS，A* and so on.
 
 # pre-requisites
-## add c++11 arguments for 'run code' 
+## vscode editor
+Add c++11 arguments for 'run code' 
 1. open settings.json from Code Runner's extension setting
 2. add following configuration to .json file
    
-   '''
     {
     "code-runner.runInTerminal": true,
     "C_Cpp.default.cppStandard": "c++11",
@@ -19,6 +18,11 @@ path planning
     },
     "window.zoomLevel": 1, 
     }
-    '''
 
-# 
+## Code List
+# modeling
+# BFS_list
+# BFS_vector
+# BFS_path
+# Astar
+   Heuristic function is manhattan distance, retour to goal quickly.
