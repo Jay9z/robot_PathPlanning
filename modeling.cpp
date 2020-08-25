@@ -12,7 +12,7 @@ class Map{
 public:
     int mapWidth;
     int mapHeight;
-    vector<vector<int>> grid;
+    vector<vector<int> > grid ;
 
     Map()
     {
@@ -23,8 +23,9 @@ public:
           {0,1,0,0,0,0},
           {0,1,0,0,0,0},
           {0,1,0,0,0,0},
-          {0,0,0,1,1,0},
+          {0,0,0,1,1,0}
       };
+
     }
     
 };
@@ -34,22 +35,22 @@ public:
    Inside the Planner class, define the start, goal, cost, movements, and movements_arrows
    Note: The goal should be defined it terms of the mapWidth and mapHeight
 */
-class Planner:Map{
+class Planner: Map{
 public:
     vector<int> start;
     vector<int> goal;
     int cost;
     vector<string> movements_arrows;
-    vector<vector<int>> movements;
+    vector<vector<int> > movements;
     
     Planner()
     {
     start = {0,0};
     goal = {mapHeight-1,mapWidth-1};
     cost = 1;
-    movements={{-1,0},{0,-1},{1,0},{0,1}};
-    movements_arrows = {"^","<","v",">"};
-    };
+    movements = {{-1,0},{0,-1},{1,0},{0,1}};
+    movements_arrows = { "^","<","v",">" };
+    }
         
 };
 
