@@ -2,6 +2,7 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -10,20 +11,62 @@ class Map {
 public:
     const static int mapWidth = 6;
     const static int mapHeight = 5;
-    vector<vector<int> > grid = {
-        { 0, 1, 0, 0, 0, 0 },
-        { 0, 1, 0, 0, 0, 0 },
-        { 0, 1, 0, 0, 0, 0 },
-        { 0, 1, 0, 0, 0, 0 },
-        { 0, 0, 0, 1, 1, 0 }
-    };
+    vector<vector<double> > map = getMap();
+    vector<vector<int> > grid = map_to_grid();
+    vector<vector<int> > heuristic = generate_heuristic_map();
+
+private:
+    vector<vector<double> > getMap()
+    {
+        vector< vector<double> > map(mapHeight,vector<double>(mapWidth));
+        ifstream ifs;
+        ifs.open("map.txt");
+
+        while(!ifs.eof()){
+        for(int h=0; h< mapHeight; h++)
+        {for(int w=0; w<mapWidth; w++)
+        {
+        ifs>>map[h][w];
+        }
+        }
+        }
+        return map;
+    }
+
+    vector<vector<int> > map_to_grid()
+    {
+        vector<vector<int> >  grid(mapHeight,vector<int>(mapWidth));
+        for(int h=0; h<mapHeight; h++)
+        {
+        for(int w=0; w<mapWidth; w++){
+            if(map[h][w]<0) grid[h][w] = 0;
+            else grid[h][w] = 1;
+        }
+        }
+        return grid;
+    }
+
+    vector<vector<int> > generate_heuristic_map()
+    {
+        int goal[2]={60,50};
+        vector<vector <int> > heuristic(mapHeight,vector<int>(mapWidth));
+        for(int h=0;h<mapHeight;h++)
+        {
+            for(int w=0;w<mapWidth;w++)
+            {
+                heuristic[h][w] = abs(h-goal[1])+abs(w-goal[0]);
+            }
+        }
+        return heuristic;
+    }
+
 };
 
 // Planner class
 class Planner : Map {
 public:
-    int start[2] = { 0, 0 };
-    int goal[2] = { mapHeight - 1, mapWidth - 1 };
+    int start[2] = { 60, 50 };
+    int goal[2] = {230, 145 };
     int cost = 1;
 
     string movements_arrows[4] = { "^", "<", "v", ">" };
@@ -34,6 +77,8 @@ public:
         { 1, 0 },
         { 0, 1 }
     };
+
+    vector<vector<int> > path;
 };
 
 // Template function to print 2D vectors of any type
@@ -51,15 +96,15 @@ void print2DVector(T Vec,bool lines=false)
         {
         if(lines) cout<<endl;    
         else cout<<",";
-        }
-        
+        }    
     }
     cout<<endl;
 }
 
 // Search function which will generate the expansion list ####*/
 void search(Map map, Planner planner)
-{int  expansion = 0;
+{
+int expansion = 0;
 int h_distance = 0;
 int findTarget =  false;
 
@@ -100,10 +145,11 @@ break;
 // Add node to frontiers and direction index to action_map
 for(int i=0;i<planner.movements.size();i++)
 {
-int cost = frontier[1]+1;
+int cost = frontier[1]+planner.cost;
 int y = frontier[2] + planner.movements[i][0];
 int x = frontier[3] + planner.movements[i][1];
-h_distance = abs(y-planner.goal[0]) + abs(x-planner.goal[1]);
+//h_distance = abs(y-planner.goal[0]) + abs(x-planner.goal[1]);
+h_distance = map.heuristic[y][x];
 int f = h_distance + cost;
 
 if(y>=0 && y<map.mapHeight  && \

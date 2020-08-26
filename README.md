@@ -2,27 +2,21 @@
 demostrate path planning algorithm with BFS，A* and so on.
 
 # pre-requisites
-## vscode editor
-Add c++11 arguments for 'run code' 
-1. open settings.json from Code Runner's extension setting
-2. add following configuration to .json file
-   
-    {
-    "code-runner.runInTerminal": true,
-    "C_Cpp.default.cppStandard": "c++11",
-    "code-runner.executorMap": {
-       "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt -std=c++11 && $dir$fileNameWithoutExt"
-    },
-    "files.associations": {
-    "typeinfo": "cpp"
-    },
-    "window.zoomLevel": 1, 
-    }
+1. vscode editor
+2. clang on mac or gcc on windows
 
-## Code List
-# modeling
-# BFS_list
-# BFS_vector
-# BFS_path
-# Astar
-   Heuristic function is manhattan distance, retour to goal quickly.
+# Installation
+1. configurations for vscode
+   
+download *.json files under .vscode directory, or (configure clang  manually)[https://code.visualstudio.com/docs/cpp/config-clang-mac].
+
+2. git clone https://github.com/Jay9z/robot_PathPlanning.git
+
+# Code List
+1. modeling
+2. BFS_list
+3. BFS_vector
+4. BFS_path
+5. Astar
+   
+route to goal location quickly with heuristic function.
