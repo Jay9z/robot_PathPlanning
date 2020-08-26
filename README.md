@@ -6,11 +6,8 @@ demostrate path planning algorithm with BFS，A* and so on.
 2. clang on mac or gcc on windows
 
 # Installation
-1. configurations for vscode
-   
-download *.json files under .vscode directory, or (configure clang  manually)[https://code.visualstudio.com/docs/cpp/config-clang-mac].
 
-2. git clone https://github.com/Jay9z/robot_PathPlanning.git
+git clone https://github.com/Jay9z/robot_PathPlanning.git
 
 # Code List
 1. modeling
