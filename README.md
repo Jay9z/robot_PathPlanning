@@ -20,4 +20,4 @@ git clone https://github.com/Jay9z/robot_PathPlanning.git
 5. Astar
 6. Astart_main
    
-    route to goal location quickly with heuristic function.
+   route to goal location quickly with heuristic function.
