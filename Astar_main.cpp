@@ -9,8 +9,8 @@ using namespace std;
 // Map class
 class Map {
 public:
-    const static int mapWidth = 300;
-    const static int mapHeight = 150;
+    const static int mapWidth = 150;
+    const static int mapHeight = 300;
     vector<vector<double> > map = getMap();
     vector<vector<int> > grid = map_to_grid();
     vector<vector<int> > heuristic = generate_heuristic_map();
@@ -65,8 +65,8 @@ private:
 // Planner class
 class Planner : Map {
 public:
-    int start[2] = {60, 50 };
-    int goal[2] = {230, 145 };
+    int start[2] = {230, 145 };  //y=230,x=145
+    int goal[2] = {60, 50 }; //y=60, x=50
     int cost = 1;
 
     string movements_arrows[4] = { "^", "<", "v", ">" };
@@ -113,8 +113,8 @@ int y;
 int g;
 int f;
 
-x = planner.start[0];
-y = planner.start[1];
+y = planner.start[0];
+x = planner.start[1];
 g = 0;
 h_distance = abs(planner.start[0]-planner.goal[0]) + abs(planner.start[1]-planner.goal[1]);
 f = g +  h_distance;
@@ -134,10 +134,10 @@ while(frontiers.size()>0)
 sort(frontiers.begin(),frontiers.end()); 
 reverse(frontiers.begin(),frontiers.end()); 
 
-cout<< "Expansion #: "<< expansion << endl;
-// Note  list
-cout<< "Open List:" ;
-print2DVector(frontiers);
+// cout<< "Expansion #: "<< expansion << endl;
+// // Note  list
+// cout<< "Open List:" ;
+// print2DVector(frontiers);
 
 // Selected  note for BFS
 vector<int> frontier = frontiers.back();
@@ -149,11 +149,13 @@ g = frontier[1];
 f = frontier[0];
 vector_map[y][x] = frontier[1];
 
-cout<< "Cell Picked:["<<frontier[0]<<" "<<frontier[1]<<" "<<frontier[2]<< " "<<frontier[3] << "]" <<endl;
-cout<<endl;
-if(x==planner.goal[0] && y==planner.goal[1])
+// cout<< "Cell Picked:["<<frontier[0]<<" "<<frontier[1]<<" "<<frontier[2]<< " "<<frontier[3] << "]" <<endl;
+// cout<<endl;
+
+if(y==planner.goal[0] && x==planner.goal[1])
 {
 findTarget = true;
+cout<<"found a path  to goal"<<endl;
 break;
 }
 
@@ -179,24 +181,30 @@ if(y>=0 && y<map.mapHeight  && \
 expansion +=  1;
 }
 
+if(!findTarget) cout<<"Blocked!";
+
+cout<<"action_map"<<endl;
+//print2DVector(action_map,true);
+
+cout<<"vection_map"<<endl;
+//print2DVector(vector_map,true);
+
 //Back propagation from goal to start
-x = planner.goal[0];
-y = planner.goal[1];
-while(x != planner.start[0] || y != planner.start[1])
+y = planner.goal[0];
+x = planner.goal[1];
+while(y != planner.start[0] || x != planner.start[1])
 {
 int index = action_map[y][x];
 y = y - planner.movements[index][0];
 x = x - planner.movements[index][1];
 path_map[y][x] = planner.movements_arrows[index];
+planner.path.push_back({y,x});
 }
 
-if(!findTarget) cout<<"Blocked!";
-cout<<"action_map"<<endl;
-print2DVector(action_map,true);
+
 cout<<"path_map"<<endl;
 print2DVector(path_map,true);
-cout<<"vection_map"<<endl;
-print2DVector(vector_map,true);
+print2DVector(planner.path);
 
 }
 
